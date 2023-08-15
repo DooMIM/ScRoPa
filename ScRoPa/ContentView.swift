@@ -27,13 +27,13 @@ extension GameChoice {
 
 
 struct ContentView: View {
-
+    
     @State private var userChoice: GameChoice?
     @State private var computerChoice: GameChoice = .rock
     @State private var alertMessage: String = ""
     @State private var animateUserChoice: Bool = false
     @State private var animationAmount = 1.0
-
+    
     @State private var scissorsTapped = false
     @State private var paperTapped = false
     @State private var rockTapped = false
@@ -61,86 +61,111 @@ struct ContentView: View {
             alertMessage = "It's a Draw!"
         }
     }
-
-
+    
+    private func onRockButtonTapped() {
+        userChoice = .rock
+        computerChoice = GameChoice.random
+        animateUserChoice = true
+        playGame()
+    }
+    
+    private func onPaperButtonTapped() {
+        userChoice = .paper
+        computerChoice = GameChoice.random
+        animateUserChoice = true
+        playGame()
+    }
+    
+    private func onScissorsButtonTapped() {
+        userChoice = .scissors
+        computerChoice = GameChoice.random
+        animateUserChoice = true
+        playGame()
+    }
+    
+    private func newGame() {
+        scissorsTapped = false
+        paperTapped = false
+        rockTapped = false
+    }
+    
     var body: some View {
-        VStack {
-            Spacer()
-            Spacer()
-            Section {
-                
-                Text("Computer's choice: ?? ")
-            }
-            Spacer()
-            Section {
-            Text("Choose:")
-                HStack {
+        NavigationView {
+            VStack {
+                Spacer()
+                Spacer()
+                Section {
                     
-                    Button(action: {
-                        userChoice = .rock
-                        computerChoice = GameChoice.random
-                        animateUserChoice = true
-                        playGame()
-                    }) {
-                        Image("rock") // Add the image name here
-                            .resizable()
-                            .frame(width: 100, height: 100)
-                            .scaleEffect(rockTapped ? 1.1 : 1.0)
-                            .onTapGesture {
-                                withAnimation(.spring(response: 0.9, dampingFraction: 0.1).repeatCount(2)) {
-                                    rockTapped.toggle()
-                                }
+                    Text("Computer's choice: \(computerChoice.rawValue)")
+                }
+                Spacer()
+                Section {
+                    Text("Choose:")
+                    HStack {
+                        
+                        // Rock Button
+                        Button(action: {
+                            onRockButtonTapped()
+                            withAnimation(.spring(response: 0.9, dampingFraction: 0.1).repeatCount(2)) {
+                                rockTapped.toggle()
                             }
-                          
-                    }
-                    Button(action: {
-                        userChoice = .paper
-                        computerChoice = GameChoice.random
-                        animateUserChoice = true
-                        playGame()
-                    }) {
-                        Image("paper")
-                            .resizable()
-                            .frame(width: 100, height: 100)
-                            .scaleEffect(paperTapped ? 1.2 : 1.0)
-                            .onTapGesture {
-                                withAnimation(.easeInOut(duration: 0.5)) {
-                                    paperTapped.toggle()
-                                }
+                            
+                        }) {
+                            Image("rock") // Add the image name here
+                                .resizable()
+                                .frame(width: 100, height: 100)
+                                .scaleEffect(rockTapped ? 1.2 : 1.0)
+                            
+                        }
+                        
+                        // Paper Button
+                        Button(action: {
+                            onPaperButtonTapped()
+                            withAnimation(.spring(response: 0.9, dampingFraction: 0.1).repeatCount(2)) {
+                                paperTapped.toggle()
                             }
-                    }
-                    Button(action: {
-                        userChoice = .scissors
-                        computerChoice = GameChoice.random
-                        animateUserChoice = true
-                        playGame()
-                    }) {
-                        Image("scissors")
-                            .resizable()
-                            .frame(width: 100, height: 100)
-                            .scaleEffect(scissorsTapped ? 1.25 : 1.0)
-                            .onTapGesture {
-                                withAnimation(.easeInOut(duration: 0.5)) {
-                                    scissorsTapped.toggle()
-                                }
+                            
+                        })
+                        {
+                            Image("paper")
+                                .resizable()
+                                .frame(width: 100, height: 100)
+                                .scaleEffect(paperTapped ? 1.2 : 1.0)
+                        }
+                        
+                        //Scissors Button
+                        Button(action: {
+                            onScissorsButtonTapped()
+                            withAnimation(.spring(response: 0.9, dampingFraction: 0.1).repeatCount(2)) {
+                                scissorsTapped.toggle()
                             }
+                            
+                        }) {
+                            Image("scissors")
+                                .resizable()
+                                .frame(width: 100, height: 100)
+                                .scaleEffect(scissorsTapped ? 1.25 : 1.0)
+                        }
                     }
                 }
                 Spacer()
-            
+                Section{
+                    Text("Result: \(alertMessage)")
+                    
+                    
+                }
+                Spacer()
+                Spacer()
             }
-            Section{
-                Text("Result: \(alertMessage)")
+            .toolbar {
+                ToolbarItem(placement: .bottomBar) {
+                    Button( action: newGame) {
+                        Text("New Game")
+                    }
+                }
+                
             }
-            Spacer()
-            Spacer()
-           
         }
-        .onAppear {
-            playGame()
-          
-        }
-
     }
 }
 
@@ -150,3 +175,4 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
+
