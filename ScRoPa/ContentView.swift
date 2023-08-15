@@ -61,6 +61,27 @@ struct ContentView: View {
             alertMessage = "It's a Draw!"
         }
     }
+    
+    private func onRockButtonTapped() {
+        userChoice = .rock
+        computerChoice = GameChoice.random
+        animateUserChoice = true
+        playGame()
+    }
+    
+    private func onPaperButtonTapped() {
+        userChoice = .paper
+        computerChoice = GameChoice.random
+        animateUserChoice = true
+        playGame()
+    }
+    
+    private func onScissorsButtonTapped() {
+        userChoice = .scissors
+        computerChoice = GameChoice.random
+        animateUserChoice = true
+        playGame()
+    }
 
 
     var body: some View {
@@ -75,55 +96,42 @@ struct ContentView: View {
             Section {
             Text("Choose:")
                 HStack {
-                    
-                    Button(action: {
-                        userChoice = .rock
-                        computerChoice = GameChoice.random
-                        animateUserChoice = true
-                        playGame()
-                    }) {
+
+                    // Rock Button
+                    Button(action: onRockButtonTapped, label: {
                         Image("rock") // Add the image name here
                             .resizable()
                             .frame(width: 100, height: 100)
                             .scaleEffect(rockTapped ? 1.1 : 1.0)
-                            .onTapGesture {
-                                withAnimation(.spring(response: 0.9, dampingFraction: 0.1).repeatCount(2)) {
-                                    rockTapped.toggle()
-                                }
-                            }
-                          
+
+                    }).onTapGesture {
+                        withAnimation(.spring(response: 0.9, dampingFraction: 0.1).repeatCount(2)) {
+                            rockTapped.toggle()
+                        }
                     }
-                    Button(action: {
-                        userChoice = .paper
-                        computerChoice = GameChoice.random
-                        animateUserChoice = true
-                        playGame()
-                    }) {
+                    
+                    // Paper Button
+                    Button(action: onPaperButtonTapped, label: {
                         Image("paper")
                             .resizable()
                             .frame(width: 100, height: 100)
                             .scaleEffect(paperTapped ? 1.2 : 1.0)
-                            .onTapGesture {
-                                withAnimation(.easeInOut(duration: 0.5)) {
-                                    paperTapped.toggle()
-                                }
-                            }
+                    }).onTapGesture {
+                        withAnimation(.easeInOut(duration: 0.5)) {
+                            paperTapped.toggle()
+                        }
                     }
-                    Button(action: {
-                        userChoice = .scissors
-                        computerChoice = GameChoice.random
-                        animateUserChoice = true
-                        playGame()
-                    }) {
+                    
+                    //Scissors Button
+                    Button(action: onScissorsButtonTapped, label: {
                         Image("scissors")
                             .resizable()
                             .frame(width: 100, height: 100)
                             .scaleEffect(scissorsTapped ? 1.25 : 1.0)
-                            .onTapGesture {
-                                withAnimation(.easeInOut(duration: 0.5)) {
-                                    scissorsTapped.toggle()
-                                }
-                            }
+                    }).onTapGesture {
+                        withAnimation(.easeInOut(duration: 0.5)) {
+                            scissorsTapped.toggle()
+                        }
                     }
                 }
                 Spacer()
@@ -134,16 +142,9 @@ struct ContentView: View {
             }
             Spacer()
             Spacer()
-           
         }
-        .onAppear {
-            playGame()
-          
-        }
-
     }
 }
-
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
